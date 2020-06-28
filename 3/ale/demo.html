@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="ale.js"></script>
+</head>
+<body>
+	<div id="app"></div>
+	<script>
+		Ale("excel", {
+            template() {
+                return this.methods.handleTemplateRender();
+            },
+            methods: {
+                handleTemplateRender() {
+                    //定义DOM基本结构
+                    var returnVal = "<table><thead><button class='a-btn' onclick='this.methods.trigSearch()'>Search</button><tr>",
+                        getSortSign = this.methods.getSortSign,
+                        sortBy = this.staticData.sortBy,
+                        rowId = -1,
+                        edit = this.data.edit;
+
+                    //循环遍历bookHeader数据并输出
+                    this.data.bookHeader.forEach(function(val, i, arr) {
+                        returnVal += "<th onclick='this.methods.handleTheadOnclick(event)'>" + val + (sortBy === i ? getSortSign() : '') + "</th>";
+                    })
+
+                    var cellId = -1;
+
+                    if (this.data.isOpenSearch) {
+                        returnVal += "</tr><tr>";
+                        for (var i = 0; i < this.data.bookHeader.length; i++) {
+                            cellId++;
+                            returnVal += "<th><input data-cell='" + cellId + "' type='text' oninput='this.methods.handleSearch(this, event)' placeHolder='Search...'></th>";
+                        }
+                    }
+
+                    returnVal += "</thead></tr><tbody>";
+
+                    //循环遍历bookData数据并输出
+                    this.data.bookData.forEach(function(thisBook, i, arr) {
+                        var cellId = -1;
+                        rowId++;
+                        //输出一行
+                        returnVal += "<tr>";
+                        thisBook.forEach(function(val, i, arr) {
+                            cellId++;
+                            if (rowId === edit.row && cellId === edit.cell) {
+                                returnVal += "<td><form data-cell='" + cellId + "' data-row='" + rowId + "' onsubmit='this.methods.save(event)'><input type='text' value='" + val + "'></form></td>";
+                            } else {
+                                returnVal += "<td data-cell='" + cellId + "' data-row='" + rowId + "' ondblclick='this.methods.handleBlockOndblclick(event)'>" + val + "</td>";
+                            }
+                        })
+                        returnVal += "</tr>";
+                    })
+                    returnVal += "</tbody></table>";
+
+                    //返回DOM结构
+                    return returnVal;
+                },
+                handleTheadOnclick(e) {
+                    this.methods.changeSortType(e);
+                    this.methods.sortList(e);
+                },
+                changeSortType(e) {
+                    this.staticData.sortBy = e.target.cellIndex;
+                    if (this.staticData.sortType === "up") {
+                        this.staticData.sortType = "down";
+                    } else {
+                        this.staticData.sortType = "up";
+                    }
+                },
+                sortList(e) {
+                    var index = e.target.cellIndex;
+                    if (this.staticData.sortType === "up") {
+                        this.data.bookData.sort(function(a, b) {
+                            return a[index].charCodeAt(0) > b[index].charCodeAt(0) ? 1 : -1;
+                        })
+                    } else {
+                        this.data.bookData.sort(function(a, b) {
+                            return a[index].charCodeAt(0) < b[index].charCodeAt(0) ? 1 : -1;
+                        })
+                    }
+
+                    this.data.bookData = this.data.bookData;
+                },
+                getSortSign() {
+                    if (this.staticData.sortType === "up") {
+                        return '\u2191';
+                    } else {
+                        return '\u2193';
+                    }
+                },
+                handleBlockOndblclick(e) {
+                    if (!this.staticData.isOpenEdit) {
+                        this.staticData.isOpenEdit = true;
+                        this.data.edit = {
+                            row: parseInt(e.target.dataset.row),
+                            cell: parseInt(e.target.dataset.cell)
+                        }
+                    }
+                },
+                save(e) {
+                    e.preventDefault();
+                    var input = e.target.firstChild;
+                    this.staticData.isOpenEdit = false;
+                    this.data.edit = {
+                        row: -1,
+                        cell: -1
+                    }
+                    this.data.bookData[e.target.dataset.row][e.target.dataset.cell] = input.value;
+                    this.data.bookData = this.data.bookData;
+                },
+                trigSearch() {
+                    if (this.data.isOpenSearch) {
+                        this.data.bookData = this.staticData.preData;
+                        this.data.isOpenSearch = false;
+                    } else {
+                        this.data.isOpenSearch = true;
+                    }
+                },
+                handleSearch(el, e) {
+                    var newData = [],
+                        elVal = el.value;
+                    this.staticData.preData.forEach(function(val, i, arr) {
+                        if (val[e.target.dataset.cell].indexOf(elVal) !== -1) {
+                            newData.push(val);
+                        }
+                    });
+
+                    this.data.bookData = newData;
+                }
+            },
+            data: {
+                bookHeader: [
+                    "Book", "Author", "Language", "Published", "Sales"
+                ],
+                bookData: [
+                    ["The Lord of the Rings", "	J. R. R. Tolkien", "English", "1954-1955", "150 million"],
+                    ["The Little Prince", "Antoine de Saint-Exupéry", "French", "1943", "140 million"],
+                    ["Dream of the Red Chamber", "Cao Xueqin", "Chinese", "1791", "100 million"]
+                ],
+                edit: {
+                    row: -1,
+                    cell: -1
+                },
+                isOpenSearch: false
+            },
+            staticData: {
+                sortBy: -1,
+                sortType: 'down',
+                isOpenEdit: false,
+                preData: [
+                    ["The Lord of the Rings", "	J. R. R. Tolkien", "English", "1954-1955", "150 million"],
+                    ["The Little Prince", "Antoine de Saint-Exupéry", "French", "1943", "140 million"],
+                    ["Dream of the Red Chamber", "Cao Xueqin", "Chinese", "1791", "100 million"]
+                ]
+            }
+        })
+        Ale.render("excel", {
+            el: "#app"
+        })
+
+
+	</script>
+</body>
+</html>

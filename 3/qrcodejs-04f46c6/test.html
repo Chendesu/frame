@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>扫描二维码</title>
+  <style>
+      .jsbridge {
+          height: 200px;
+          width: 200px;
+          background-color: red;
+      }
+
+      .upimg {
+          height: 200px;
+          width: 200px;
+          background-color: green;
+          margin-bottom: 50px;
+      }
+
+      .qr-btn{
+          width:200px;
+          height:50px;
+          background-color:#157EFB ;
+          line-height: 50px;
+          text-align: center;
+          color:#fff;
+          border-radius: 10%  10%;
+          margin-bottom:10px;
+      }
+
+      input[node-type=jsbridge]{
+          visibility: hidden;
+      }
+  </style>
+</head>
+<body>
+  <div>
+    <div class="qr-btn" node-type="qr-btn">扫描二维码1
+      <input node-type="jsbridge" type="file" name="myPhoto" value="扫描二维码1" />
+    </div>
+  </div>
+  <div>
+    <div class="qr-btn" node-type="qr-btn">扫描二维码2
+      <input node-type="jsbridge" type="file" name="myPhoto" value="扫描二维码2" />
+    </div>
+  </div>
+  <div class="result-qrcode">
+
+  <script src="jquery.min.js"></script>
+  <script src="qrcode.min.js"></script>
+  <script src="qrcode_lib.js"></script>
+  <script>
+      //初始化扫描二维码按钮，传入自定义的 node-type 属性
+      $(function () {
+        Qrcode.init($('[node-type=qr-btn]'));
+      });
+
+   
+  </script>
+</body>
+</html>

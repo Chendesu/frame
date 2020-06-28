@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		.ven-sel ul li {
+		    height: 27px;
+		    border-top: 0px;
+		    font-size: 12px;
+		    line-height: 27px;
+		    text-align: center;
+		    background: #fff;
+		    cursor: pointer;
+		}
+		.ven-sel ul {
+		    position: absolute;
+		    top: 27px;
+		    left: 0;
+		    z-index: 10;
+		    float: left;
+		    display: none;
+		    border: 1px solid #ccc;
+		    border-top: 0;
+		}
+		.ven-sel {
+		    position: relative;
+		    float: left;
+		    height: 27px;
+		    margin-right: 5px;
+		    padding-top: 1px;
+		}
+		.ven-sel span {
+		    display: block;
+		    height: 25px;
+		    border: 1px solid #ccc;
+		    line-height: 27px;
+		    font-size: 12px;
+		    text-indent: 5px;
+		    cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+	<div class="ven-boo">
+        <div class="ven-sel db_province" id="s_province">
+            <span>省份</span>
+            <ul>
+            </ul>
+        </div>
+        <div class="ven-sel db_city" id="s_city">
+            <span>地级市</span>
+            <ul>
+            </ul>
+        </div>
+        <div class="ven-sel db_county" id="s_county">
+            <span>市、县级市</span>
+            <ul>
+            </ul>
+        </div>
+        <div class="ven-sel db_street" id="s_street">
+            <span>街道区</span>
+            <ul>
+            </ul>
+        </div>
+	</div> 
+	<script src="jquery-1.12.3.min.js"></script>
+	<script>
+		downBox('.db_province', 126);
+		downBox('.db_city', 126);
+		downBox('.db_county', 126);
+		downBox('.db_street', 126);
+		function downBox(downClass, downBoxW) {
+		    $(downClass).css({width : downBoxW + 2 + 'px'});
+		    $(downClass + ' ul li').css({width : downBoxW + 'px'});
+		    $(downClass + ' span').css({width : downBoxW + 'px'});
+		    var picX = $(downClass + ' span').width() - 16;
+		    var changeButtom = '#fff url("images/sel_arrow.png") no-repeat ' + picX + 'px center';
+		    var changeTop = '#fff url("images/sel_arrow_top.png") no-repeat ' + picX + 'px center';
+		    $(downClass + ' span').css({background : changeButtom});
+		    $(document).click(function(){
+		        $(downClass + ' ul').hide();
+		        $(downClass + ' span').css({background : changeButtom});
+		        $('.ven-sel').children('ul').hide();
+		    })
+		    $(downClass + ' span').on('click', function(event) {
+		        if ($(this).siblings('ul').css('display') == 'block') {
+		            $(downClass).children('ul').hide();
+		            $(downClass).children('span').css({background : changeButtom});
+		        }
+		        else {
+		            $('.ven-sel').children('ul').hide();
+		            $('.ven-sel').children('span').css({backgroundImage : 'url("images/sel_arrow.png")'});
+		            $(this).css({background : changeTop});
+		            $(this).siblings('ul').show();
+		        }
+		        event.stopPropagation();
+		    })
+		    $(downClass + ' ul li').hover(function() {
+		        $(this).css({background : '#d4e5ee'});
+		        $(this).on('click', function() {
+		            $(this).parent('ul').siblings('span').html($(this).html());
+		            $(this).parent('ul').hide();
+		            $(this).parent('ul').siblings('span').css({background : changeButtom});
+		        })
+		    },function() {
+		        $(this).css({background : '#fff'})
+		    })
+		}
+	</script>
+</body>
+</html>
