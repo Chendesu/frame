@@ -67,7 +67,7 @@
     "grunt-webpack": "3.0.2",
     "handlebars": "4.0.5",
     "load-grunt-tasks": "3.5.0",
-    "mocha": "2.5.3",
+    "mocha": "10.1.0",
     "open-sans-fontface": "https://github.com/clientIO/open-sans/archive/1.4.2.tar.gz",
     "phantomjs-prebuilt": "2.1.7",
     "prismjs": "1.5.1",
@@ -78,7 +78,7 @@
     "sinon": "1.17.5",
     "time-grunt": "1.4.0",
     "typescript": "2.5.3",
-    "webdriverio": "4.0.8",
+    "webdriverio": "4.14.4",
     "webpack": "2.6.1",
     "webpack-dev-server": "2.4.0"
   }
