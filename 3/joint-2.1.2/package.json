@@ -47,7 +47,7 @@
     "async": "2.0.1",
     "chai": "3.5.0",
     "cheerio": "0.20.0",
-    "express": "4.14.0",
+    "express": "4.17.3",
     "grunt": "1.0.1",
     "grunt-browserify": "5.0.0",
     "grunt-compile-docs": "1.2.0",
